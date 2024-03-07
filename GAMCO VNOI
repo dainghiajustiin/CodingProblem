@@ -1,0 +1,82 @@
+/*      Today is 05.03.2024
+    Do your best because tomorrow will be better!
+                                sign
+                               Justiin
+*/
+
+#include<bits/stdc++.h>
+#define int long long
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define Task ""
+
+using namespace std;
+
+using ll = long long;
+using str = string;
+using pii = pair<int,int>;
+using db = double;
+
+const int MOD = 1e9 + 7;
+const int inf = 2e18;
+
+//Program:
+
+//Begin
+
+int m, n;
+char a[103][103];
+int v[103][103];
+int t1, t2, t3, t4;
+vector<int> vec = {-1, 1};
+
+
+void dfs(int i, int j, int value){
+
+    for(auto p:vec){
+        int k = i + j + p;
+        if( a[k - i][j] != '*' && v[k - i][j] > v[i][j] + 1){
+            v[k - i][j] = v[i][j] + 1;
+            dfs(k - i, j, v[k - i][j]);
+        }
+        if( a[i][k - j] != '*' && v[i][k - j] > v[i][j] + 1){
+            v[i][k - j] = v[i][j] + 1;
+            dfs(i,k - j, v[i][k - j]);
+        }
+    }
+}
+
+signed main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+    cin >> m >> n;
+
+    for(int i = 0; i < 103; i++){
+        for(int j = 0; j <= 103; j++){
+            a[i][j] = '*';
+            v[i][j] = MOD;
+        }
+    }
+
+    for(int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            cin >> a[i][j];
+            if(a[i][j] == 'C') t1 = i, t2 = j;
+            if(a[i][j] == 'B') t3 = i, t4 = j;
+        }
+    }
+
+    v[t1][t2] = 0;
+
+    dfs(t1, t2, 0);
+
+    cout << v[t3][t4];
+
+    return 0;
+}
+
+// End.
