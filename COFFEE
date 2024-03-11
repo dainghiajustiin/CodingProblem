@@ -1,0 +1,98 @@
+/*      Today is 11.03.2024
+    Do your best because tomorrow will be better!
+                                sign
+                               Justiin
+*/
+
+#include<bits/stdc++.h>
+#define int long long
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define Task ""
+#define bit(x) (1 << (x))
+
+using namespace std;
+
+using ll = long long;
+using str = string;
+using pii = pair<int,int>;
+using db = double;
+
+const int MOD = 1e9 + 7;
+const int inf = 2e18;
+
+//Topic:
+//Program:
+
+//Begin
+
+const int len = 3e6 + 7;
+int a[len], n, t;
+
+struct node{
+    int Min, Max;
+} tree[len << 2];
+
+int ans = 0;
+
+void build(int id, int l, int r){
+    if(l == r){
+        tree[id].Min = a[l];
+        tree[id].Max = a[r];
+        return;
+    }
+
+    int m = l + r >> 1;
+
+    build(id << 1, l, m);
+    build(id << 1 | 1, m + 1, r);
+
+    tree[id].Min = min(tree[id << 1].Min, tree[id << 1 | 1].Min);
+    tree[id].Max = max(tree[id << 1].Max, tree[id << 1 | 1].Max);
+}
+
+int ma(int id, int l, int r, int u, int v){
+    if(v < l || r < u) return -inf;
+
+    if(u <= l && r <= v) return tree[id].Max;
+
+    int m = l + r >> 1;
+
+    return max( ma(id << 1, l, m, u, v), ma(id << 1 | 1, m + 1, r, u, v) );
+}
+
+int mi(int id, int l, int r, int u, int v){
+    if(v < l || r < u) return inf;
+
+    if(u <= l && r <= v) return tree[id].Min;
+
+    int m = l + r >> 1;
+
+    return min( mi(id << 1, l, m, u, v), mi(id << 1 | 1, m + 1, r, u ,v) );
+}
+
+signed main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	cin >> n >> t;
+
+	for(int i = 1; i <= n; i++) cin >> a[i];
+
+	build(1, 1, n);
+	int j = 1;
+
+	for(int i = 1; i <= n; i++){
+        while( ma(1, 1, n, j, i) - mi(1, 1, n, j, i) > t ) j++;
+        ans = max(ans, i - j + 1);
+	}
+
+	cout << ans;
+
+    return 0;
+}
+
+// End.
