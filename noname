@@ -1,0 +1,194 @@
+/*      Today is 29.02.2024
+    Do your best because tomorrow will be better!
+                                sign
+                               Justiin
+*/
+
+#include<bits/stdc++.h>
+#define int long long
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define Task ""
+#define bit(x) (1 << x)
+#define mask(i, x) ((x >> i) & 1)
+
+using namespace std;
+
+using ll = long long;
+using str = string;
+using pii = pair<int,int>;
+using db = double;
+
+const int MOD = 1e9 + 7;
+const int inf = 2e18;
+
+//Link:
+//Program:
+
+//Begin
+
+const int len = 1e6 + 7;
+const int mod = 1e9 + 9;
+
+bool dd[len + 7];
+vector<int> pri;
+int mp[len + 7];
+
+int m, n, k;
+
+void eratonthenes(){
+    dd[0] = dd[1] = 1;
+
+    for(int i = 2; i*i <= len; i++){
+        if(!dd[i])
+            for(int j = i*i; j <= len; j += i) dd[j] = 1;
+    }
+
+    pri.pb(2);
+    pri.pb(3);
+
+    for(int i = 5; i <= len; i += 6){
+        if(!dd[i]) pri.pb(i);
+        if(!dd[i + 2]) pri.pb(i + 2);
+    }
+}
+
+int Pow(int a, int b){
+    if(!b) return 1;
+
+    int k = Pow(a, b/2) %mod;
+
+    k = k*k %mod;
+
+    return (b&1 ? k*a %mod : k);
+}
+
+void case1(){
+
+    for(int i = 1; i <= m; i++){
+        int p; cin >> p;
+
+        for(auto x:pri){
+            if(x > sqrt(p)) break;
+            if( p%x == 0 ){
+                while(p%x == 0){
+                    p /= x;
+                    mp[x]--;
+                }
+            }
+        }
+
+        if(p > 1){
+            mp[p]--;
+        }
+    }
+
+    for(int i = 1; i <= n; i++){
+        int q; cin >> q;
+
+        for(auto x:pri){
+            if(x > sqrt(q)) break;
+            if( q%x == 0 ){
+                while(q%x == 0){
+                    q /= x;
+                    mp[x]++;
+                }
+            }
+        }
+
+        if(q > 1){
+            mp[q]++;
+        }
+    }
+
+    for(auto x:pri){
+        if(mp[x] != 0){
+            cout << 0;
+            return;
+        }
+    }
+
+    cout << 1;
+}
+
+void case2(){
+
+    for(int i = 1; i <= m; i++){
+        int p; cin >> p;
+
+        for(auto x:pri){
+            if(x > sqrt(p)) break;
+            if( p%x == 0 ){
+                while(p%x == 0){
+                    p /= x;
+                    mp[x]--;
+                }
+            }
+        }
+
+        if(p > 1){
+            mp[p]--;
+        }
+    }
+
+    for(int i = 1; i <= n; i++){
+        int q; cin >> q;
+
+        for(auto x:pri){
+            if(x > sqrt(q)) break;
+            if( q%x == 0 ){
+                while(q%x == 0){
+                    q /= x;
+                    mp[x]++;
+                }
+            }
+        }
+
+        if(q > 1){
+            mp[q]++;
+        }
+    }
+
+    int ans = 1;
+
+    for(auto x:pri){
+        if(mp[x] < 0){
+            cout << 0;
+            return;
+        }
+        if(mp[x] > 0){
+            ans = ans * 2 %mod;
+        }
+    }
+
+    cout << ans;
+}
+
+void case3(){
+
+}
+
+
+signed main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	freopen( "SOHOC.INP", "r", stdin);
+	freopen( "SOHOC.OUT", "w", stdout);
+
+	eratonthenes();
+
+	cin >> m >> n >> k;
+
+	if(k == 1) case1();
+	else if(k == 2) case2();
+	else case3();
+
+
+    return 0;
+}
+
+// End.
