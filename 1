@@ -1,0 +1,94 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+#define el '\n'
+#define fi first
+#define se second
+#define pb push_back
+const int MOD = 1e9 + 7;
+using ll = long long;
+using pii = pair<int,int>;
+
+const int maxn = 3e5 + 7;
+
+struct Data{
+    int be, en, val;
+};
+
+int n, m, k;
+int need[maxn];
+int T[maxn];
+Data Q[maxn];
+vector<int> In[maxn];
+pair<int,int> range[maxn];
+
+void read(){
+    cin >> n >> m;
+    for(int i = 1; i <= m; i++){
+        int x; cin >> x;
+        In[x].pb(i);
+    }
+    for(int i = 1; i <= n; i++) cin >> need[i];
+
+    cin >> k;
+    for(int i = 1; i <= k; i++) cin >> Q[i].be >> Q[i].en >> Q[i].val;
+    for(int i = 1; i <= n; i++) range[i] = {0, k + 1};
+
+}
+
+int get(int x){
+    int sum = 0;
+    for(; x <= m; x += (x & -x)) sum += T[x];
+    return sum;
+}
+
+void update(int x, int val){
+    for(; x; x -= (x & -x)) T[x] += val;
+}
+
+void Update_Query(Data x){
+    if(x.be <= x.en){
+        update(x.en, x.val);
+        update(x.be - 1, -x.val);
+    }
+    else{
+        update(m, x.val);
+        update(x.be - 1, -x.val);
+        update(x.en, x.val);
+    }
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    for(int loop = log2(k) + 2; loop; loop--){
+        vector <int> group[maxn];
+        memset(T, 0, sizeof T);
+        for(int i = 1; i <= n; i++)
+            if (range[i].se - range[i].fi > 1)
+                group[(range[i].fi + range[i].se)/2].pb(i);
+
+        for(int i = 1; i <= k; i++)
+        {
+            Update_Query(Q[i]);
+            for (int &x : group[i]){
+                long long sum = 0;
+                for (int &p : In[x]) {
+                    sum += get(p);
+                    if (sum >= need[x]) break;
+                }
+                if (sum >= need[x]) range[x].se = i;
+                    else range[x].fi = i;
+            }
+            group[i].clear();
+        }
+    }
+
+    for(int i = 1; i <= n ;i++)
+        if (range[i].se > k) cout << "-1\n" ;
+            else cout << range[i].se << "\n";
+
+    return 0;
+}
