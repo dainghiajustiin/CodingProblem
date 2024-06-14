@@ -1,0 +1,68 @@
+/*      Today is 09.03.2024
+    Do your best because tomorrow will be better!
+                                sign
+                               Justiin
+*/
+
+#include<bits/stdc++.h>
+#define int long long
+#define fi first
+#define se second
+#define pb push_back
+#define el '\n'
+#define Task ""
+#define bit(x) (1 << (x))
+
+using namespace std;
+
+using ll = long long;
+using str = string;
+using pii = pair<int,int>;
+using db = double;
+
+const int MOD = 1e9 + 7;
+const int inf = 2e18;
+
+//Topic:
+//Program:
+
+//Begin
+
+const int len = 1e6 + 7;
+int a[len];
+
+void Case(){
+    int n;
+    cin >> n;
+
+    int ans = 0;
+
+    for(int i = 1; i <= n; i++){
+        cin >> a[i];
+    }
+
+    sort(a + 1, a + 1 + n);
+    a[n + 1] = MOD;
+
+    for(int i = 1; i <= n; i++){
+        int j = i;
+        while(a[i] == a[i + 1]) i++;
+
+        if(i > j){
+            int k = i - j - 1;
+            ans += k*(k + 1)*(k + 2)/6 + (k + 1) * (k + 2) / 2 * (j - 1);
+        }
+    }
+    cout << ans << el;
+}
+
+signed main(){
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+
+	Case();
+    return 0;
+}
+
+// End.
